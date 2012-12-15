@@ -25,6 +25,12 @@ export PASSWORD=`openssl passwd -1 password`
 exec 2>&1
 exec > >(tee -a $LOGFILE)
 
+if [ ! -f sysctl.conf ];
+then
+  echo "PLEASE USE git clone to get the whole project from github."
+  exit
+fi
+
 echo "- START ------------"
 date +"%Y/%m/%d %H:%M:%S"
 
