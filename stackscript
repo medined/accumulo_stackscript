@@ -8,9 +8,22 @@ fi
 export HADOOP_VERSION=hadoop-1.0.4
 
 ##########
-# Make sure we have all of the files locally
+# Paradigm shift - instead of pulling each file individually just
+# get the whole project from github in one shot.
+#
+# Before this script is called have your system do:
+#
+# apt-get -y install git
+# git clone https://github.com/medined/accumulo_stackscript.git
 
-BASE_SOURCE_URL=https://raw.github.com/medined/accumulo_stackscript/master/linode_
+export CDIR=`pwd`
+export LOGFILE=/root/build.log
+export PASSWORD=`openssl passwd -1 password`
+
+##########
+# enable logging. Logs both to file and screen.
+exec 2>&1
+exec > >(tee -a $LOGFILE)
 
 if [ ! -f sysctl.conf ];
 then
@@ -18,14 +31,13 @@ then
   exit
 fi
 
-CDIR=`pwd`
+echo "- START ------------"
+date +"%Y/%m/%d %H:%M:%S"
 
-PASSWORD=`openssl passwd -1 password`
-
-LOGFILE=/tmp/startup.log
-
-echo "- START ------------" >> $LOGFILE
-date +"%Y/%m/%d %H:%M:%S" >> $LOGFILE
+##########
+# Setup environment variables when a user logs in.
+cp $CDIR/login_startup.sh /etc/profile.d
+source /etc/profile.d/login_startup.sh
 
 function add_a_user {
   # create the group, if needed.
@@ -59,7 +71,7 @@ function add_a_user {
     su $1 -c "cat /home/$1/.ssh/id_dsa.pub >> /home/$1/.ssh/authorized_keys"
   fi
   su $1 -c "chmod 600 /home/$1/.ssh/authorized_keys"
-  echo "Created user: $1" >> $LOGFILE
+  echo "Created user: $1"
   # If you want to give sudo access to the accounts, uncomment the following line.
   # NOTE: This instance is very insecure. Proceed with caution.
   # adduser $1 sudo
@@ -71,17 +83,21 @@ result=`grep "ssh-dss" /etc/ssh/ssh_known_hosts | wc -l`
 if [ "$result" == "0" ];
 then
   ssh-keyscan -t dsa localhost >> /etc/ssh/ssh_known_hosts
+  ssh-keyscan -t dsa `hostname -f` >> /etc/ssh/ssh_known_hosts
+  ssh-keyscan -t dsa `hostname` >> /etc/ssh/ssh_known_hosts
 fi
 result=`grep "ssh-rsa" /etc/ssh/ssh_known_hosts | wc -l`
 if [ "$result" == "0" ];
 then
   ssh-keyscan -t rsa localhost >> /etc/ssh/ssh_known_hosts
+  ssh-keyscan -t rsa `hostname -f` >> /etc/ssh/ssh_known_hosts
+  ssh-keyscan -t rsa `hostname` >> /etc/ssh/ssh_known_hosts
 fi
 
 ##########
 # Update the sysctl file to set swappiness. And set it for the current session.
-echo "SYSCTL.CONF: Setting swappiness to 10" >> $LOGFILE
-echo "SYSCTL.CONF: Disabling IPV6" >> $LOGFILE
+echo "SYSCTL.CONF: Setting swappiness to 10"
+echo "SYSCTL.CONF: Disabling IPV6"
 cp $CDIR/sysctl.conf /etc/sysctl.conf
 sysctl vm.swappiness=10
 
@@ -107,23 +123,9 @@ cp $CDIR/iptables.firewall.rules /etc/iptables.firewall.rules
 cp $CDIR/firewall /etc/network/if-pre-up.d/firewall
 iptables-restore < /etc/iptables.firewall.rules
 
-##########
-# Setup environment variables when a user logs in.
-result=`grep "ACCUMULO_STACKSCRIPT" /etc/profile.d/login_startup.sh | wc -l`
-if [ "$result" == "0" ];
-then
-  echo "export DEFAULT_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games" >> /etc/profile.d/login_startup.sh
-  echo "export ACCUMULO_HOME=/usr/local/accumulo" >> /etc/profile.d/login_startup.sh
-  echo "export HADOOP_PREFIX=/usr/local/hadoop" >> /etc/profile.d/login_startup.sh
-  echo "export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-i386" >> /etc/profile.d/login_startup.sh
-  echo "export ZOOKEEPER_HOME=/usr/local/zookeeper" >> /etc/profile.d/login_startup.sh
-  echo "export PATH=\$ACCUMULO_HOME/bin:\$HADOOP_HOME/bin:\$JAVA_HOME/bin:\$ZOOKEEPER_HOME/bin:\$DEFAULT_PATH" >> /etc/profile.d/login_startup.sh
-  echo "# Updated by ACCUMULO_STACKSCRIPT" >> /etc/profile.d/login_startup.sh
-fi
-
-apt-get -y install curl git maven2 openssh-server openssh-client openjdk-6-jdk subversion screen
+apt-get -y install curl git maven2 openssh-server openssh-client openjdk-6-jdk subversion screen g++ make
 #apt-get -y fail2bin
-echo "Installed packages" >> $LOGFILE
+echo "Installed packages"
 
 # install and configure hadoop 
 if [ ! -f /usr/local/$HADOOP_VERSION/conf/core-site.xml ];
@@ -166,7 +168,7 @@ then
   su hadoop -c "/usr/local/hadoop/bin/start-mapred.sh"
 fi
 
-echo "Installed Hadoop" >> $LOGFILE
+echo "Installed Hadoop"
 
 # install and configure zookeeper
 if [ ! -f /usr/local/zookeeper-3.4.3/conf/zoo.cfg ];
@@ -188,7 +190,7 @@ then
   su zookeeper -c "cd /usr/local/zookeeper; ./bin/zkServer.sh start"
 fi
 
-echo "Installed Zookeeper" >> $LOGFILE
+echo "Installed Zookeeper"
 
 ##########
 # Create an hadoop user directory if needed.
@@ -201,22 +203,29 @@ fi
 
 su accumulo -c "mkdir -p /home/accumulo/workspace/accumulo"
 su accumulo -c "svn co https://svn.apache.org/repos/asf/accumulo/trunk /home/accumulo/workspace/accumulo"
-echo "Cloned accumulo" >> $LOGFILE
+echo "Cloned accumulo"
 
 su accumulo -c "cd /home/accumulo/workspace/accumulo; mvn -Dmaven.test.skip=true package -P assemble"
-echo "Compiled accumulo" >> $LOGFILE
+echo "Compiled accumulo"
 
 # Make the lib/ext directory group writeable so that you can deply jar files there.
 cd /usr/local
 tar xvfz /home/accumulo/workspace/accumulo/assemble/target/accumulo-1.5.0-SNAPSHOT-dist.tar.gz
+
+# Compile the native libraries
+cd /usr/local/accumulo-1.5.0-SNAPSHOT/server/src/main/c++
+make
+
 chown -R accumulo:accumulo /usr/local/accumulo-1.5.0-SNAPSHOT
 # remove symbolic link and then create it.
 rm -f /usr/local/accumulo
 ln -s /usr/local/accumulo-1.5.0-SNAPSHOT accumulo
 
-mkdir -p /usr/local/accumulo/lib/ext
-mkdir -p /usr/local/accumulo/logs
-mkdir -p /usr/local/accumulo/walogs
+su accumulo -c "mkdir -p /usr/local/accumulo/lib/ext"
+su accumulo -c "mkdir -p /usr/local/accumulo/logs"
+su accumulo -c "mkdir -p /usr/local/accumulo/walogs"
+
+# Make the lib/ext directory group writeable so that you can deply jar files there.
 chmod g+w /usr/local/accumulo/lib/ext
 cp /usr/local/accumulo/conf/examples/512MB/standalone/* /usr/local/accumulo/conf
 cp $CDIR/accumulo-site.xml /usr/local/accumulo/conf/accumulo-site.xml
@@ -229,9 +238,9 @@ hostname -f > /usr/local/accumulo/conf/tracers
 
 ########
 
-su accumulo -c "/usr/local/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo"
+su accumulo -c "/usr/local/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo 2>/dev/null"
 su accumulo -c "/usr/local/accumulo/bin/accumulo init --clear-instance-name --instance-name instance --password secret"
 su accumulo -c "/usr/local/accumulo/bin/start-all.sh"
 
-date +"%Y/%m/%d %H:%M:%S" >> $LOGFILE
-echo "- END ------------" >> $LOGFILE
+date +"%Y/%m/%d %H:%M:%S"
+echo "- END ------------"
