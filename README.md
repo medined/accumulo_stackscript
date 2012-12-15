@@ -1,7 +1,7 @@
 Accumulo Stackscript
 ====================
 
-Provides stackscripts to install hadoop, zookeeper and accumulo on a Linode server.
+Provides stackscripts to install hadoop, zookeeper and accumulo on a Linode server. 
 
 I wanted a way to test the very latest Accumulo code. I could not use any of my existing systems because they were multi-use boxes. So I wrote a Stackscript in order to prepare a Linode server. Note that this script pulls a few files from my affy.com server for simplicity.
 
