@@ -10,39 +10,12 @@ export HADOOP_VERSION=hadoop-1.0.4
 ##########
 # Make sure we have all of the files locally
 
-BASE_SOURCE_URL=https://raw.github.com/medined/accumulo_stackscript/master/linode_build_v00
+BASE_SOURCE_URL=https://raw.github.com/medined/accumulo_stackscript/master/linode_
 
 if [ ! -f sysctl.conf ];
 then
-  echo "Getting Sysctl"
-  wget -q $BASE_SOURCE_URL/sysctl.conf
-fi
-
-if [ ! -f $HADOOP_VERSION.tar.gz ];
-then
-  echo "Getting Hadoop"
-  wget -q $BASE_SOURCE_URL/$HADOOP_VERSION.tar.gz
-  wget -q $BASE_SOURCE_URL/core-site.xml 
-  wget -q $BASE_SOURCE_URL/hdfs-site.xml
-  wget -q $BASE_SOURCE_URL/mapred-site.xml
-  wget -q $BASE_SOURCE_URL/hadoop-env.sh
-fi
-if [ ! -f zookeeper-3.4.3.tar.gz ];
-then
-  echo "Getting Zookeeper"
-  wget -q $BASE_SOURCE_URL/zookeeper-3.4.3.tar.gz
-  wget -q $BASE_SOURCE_URL/zoo.cfg
-fi
-if [ ! -f accumulo-site.xml ];
-then
-  echo "Getting Accumulo Configuration"
-  wget -q $BASE_SOURCE_URL/accumulo-site.xml
-  wget -q $BASE_SOURCE_URL/accumulo-env.sh
-fi
-if [ ! -f iptables.firewall.rules ];
-then
-  wget -q $BASE_SOURCE_URL/iptables.firewall.rules
-  wget -q $BASE_SOURCE_URL/firewall
+  echo "PLEASE USE git clone to get the whole project from github."
+  exit
 fi
 
 CDIR=`pwd`
@@ -73,7 +46,8 @@ function add_a_user {
   then
     useradd -m -s /bin/bash -g $1 $1 -p $PASSWORD
   fi
-  mkdir -p /home/$1/.ssh
+  su $1 -c "mkdir -p /home/$1/.ssh"
+  su $1 -c "chmod 700 /home/$1/.ssh"
   if [ ! -f /home/$1/.ssh/id_rsa ];
   then
     su $1 -c "ssh-keygen -t rsa -P '' -f /home/$1/.ssh/id_rsa"
