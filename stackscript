@@ -140,7 +140,7 @@ if [ "$result" == "0" ];
 then
   echo "export DEFAULT_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games" >> /etc/profile.d/login_startup.sh
   echo "export ACCUMULO_HOME=/usr/local/accumulo" >> /etc/profile.d/login_startup.sh
-  echo "export HADOOP_HOME=/usr/local/hadoop" >> /etc/profile.d/login_startup.sh
+  echo "export HADOOP_PREFIX=/usr/local/hadoop" >> /etc/profile.d/login_startup.sh
   echo "export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-i386" >> /etc/profile.d/login_startup.sh
   echo "export ZOOKEEPER_HOME=/usr/local/zookeeper" >> /etc/profile.d/login_startup.sh
   echo "export PATH=\$ACCUMULO_HOME/bin:\$HADOOP_HOME/bin:\$JAVA_HOME/bin:\$ZOOKEEPER_HOME/bin:\$DEFAULT_PATH" >> /etc/profile.d/login_startup.sh
@@ -173,7 +173,7 @@ fi
 # Create the hadoop temp directory. It should not be in the /tmp directory because that directory
 # disappears after each system restart. Something that is done a lot with virtual machines.
 mkdir -p /hadoop_tmp_dir
-chmod 777 /hadoop_tmp_dir
+chmod 755 /hadoop_tmp_dir
 chown hadoop:hadoop /hadoop_tmp_dir
 
 ##########
