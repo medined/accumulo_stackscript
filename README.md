@@ -1,7 +1,7 @@
 Accumulo Stackscript
 ====================
 
-Provides stackscripts to install hadoop, zookeeper and accumulo on a Linode server. 
+Provides stackscripts to install hadoop, zookeeper and accumulo on a Linode server.
 
 I wanted a way to test the very latest Accumulo code. I could not use any of my existing systems because they were multi-use boxes. So I wrote a Stackscript in order to prepare a Linode server. Note that this script pulls a few files from my affy.com server for simplicity.
 
@@ -31,4 +31,16 @@ Screen
 ======
 
 http://library.linode.com/linux-tools/utilities/screen - the Stackscript installs screen which is useful so that you can always connect to the same session. Type Ctl-A+d in order to detach the session. Use screen -r to reconnect.
+
+
+Git
+===
+
+Making a tag.
+
+  git tag -a 2012_DEC_14 -m "with hadoop 0.20.2"
+  git show 2012_DEC_14
+  git describe --tags
+  # make a file change.
+  git push --tags
 
