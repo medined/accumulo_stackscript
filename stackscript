@@ -215,6 +215,7 @@ tar xfz /home/accumulo/workspace/accumulo/assemble/target/accumulo-1.5.0-SNAPSHO
 # Compile the native libraries
 cd /usr/local/accumulo-1.5.0-SNAPSHOT/server/src/main/c++
 make
+echo "Compiled navtive library"
 
 chown -R accumulo:accumulo /usr/local/accumulo-1.5.0-SNAPSHOT
 # remove symbolic link and then create it.
@@ -224,6 +225,8 @@ ln -s /usr/local/accumulo-1.5.0-SNAPSHOT /usr/local/accumulo
 su accumulo -c "mkdir -p /usr/local/accumulo/lib/ext"
 su accumulo -c "mkdir -p /usr/local/accumulo/logs"
 su accumulo -c "mkdir -p /usr/local/accumulo/walogs"
+
+echo "Created ext, logs, and walogs directory."
 
 # Make the lib/ext directory group writeable so that you can deply jar files there.
 chmod g+w /usr/local/accumulo/lib/ext
@@ -238,8 +241,11 @@ hostname -f > /usr/local/accumulo/conf/tracers
 
 ########
 
+echo "initializing accumulo"
 su accumulo -c "/usr/local/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo 2>/dev/null"
 su accumulo -c "/usr/local/accumulo/bin/accumulo init --clear-instance-name --instance-name instance --password secret"
+
+echo "starting accumulo"
 su accumulo -c "/usr/local/accumulo/bin/start-all.sh"
 
 date +"%Y/%m/%d %H:%M:%S"
