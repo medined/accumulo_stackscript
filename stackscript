@@ -219,7 +219,7 @@ make
 chown -R accumulo:accumulo /usr/local/accumulo-1.5.0-SNAPSHOT
 # remove symbolic link and then create it.
 rm -f /usr/local/accumulo
-ln -s /usr/local/accumulo-1.5.0-SNAPSHOT accumulo
+ln -s /usr/local/accumulo-1.5.0-SNAPSHOT /usr/local/accumulo
 
 su accumulo -c "mkdir -p /usr/local/accumulo/lib/ext"
 su accumulo -c "mkdir -p /usr/local/accumulo/logs"
