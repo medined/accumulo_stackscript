@@ -131,7 +131,7 @@ echo "Installed packages"
 if [ ! -f /usr/local/$HADOOP_VERSION/conf/core-site.xml ];
 then
   cd /usr/local
-  tar xvfz $CDIR/$HADOOP_VERSION.tar.gz
+  tar xfz $CDIR/$HADOOP_VERSION.tar.gz
   chown -R hadoop:hadoop /usr/local/$HADOOP_VERSION
   rm -f /usr/local/hadoop
   ln -s $HADOOP_VERSION hadoop
@@ -174,7 +174,7 @@ echo "Installed Hadoop"
 if [ ! -f /usr/local/zookeeper-3.4.3/conf/zoo.cfg ];
 then
   cd /usr/local
-  tar xvfz $CDIR/zookeeper-3.4.3.tar.gz
+  tar xfz $CDIR/zookeeper-3.4.3.tar.gz
   cp $CDIR/zoo.cfg /usr/local/zookeeper-3.4.3/conf/zoo.cfg
   chown -R zookeeper:zookeeper /usr/local/zookeeper-3.4.3
   ln -s /usr/local/zookeeper-3.4.3 /usr/local/zookeeper
@@ -210,7 +210,7 @@ echo "Compiled accumulo"
 
 # Make the lib/ext directory group writeable so that you can deply jar files there.
 cd /usr/local
-tar xvfz /home/accumulo/workspace/accumulo/assemble/target/accumulo-1.5.0-SNAPSHOT-dist.tar.gz
+tar xfz /home/accumulo/workspace/accumulo/assemble/target/accumulo-1.5.0-SNAPSHOT-dist.tar.gz
 
 # Compile the native libraries
 cd /usr/local/accumulo-1.5.0-SNAPSHOT/server/src/main/c++
