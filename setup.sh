@@ -2,6 +2,11 @@
 # setup some basic environment variables. 
 # define the add user function.
 
+##########
+# enable logging. Logs both to file and screen.
+exec 2>&1
+exec > >(tee -a $LOGFILE)
+
 if [[ $EUID -ne 0 ]]; then
    echo "You must be root to run this script. Aborting...";
    exit 1;
