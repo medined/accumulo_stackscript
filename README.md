@@ -39,9 +39,11 @@ Git
 
 Making a tag.
 
-  git tag -a 2012_DEC_14 -m "with hadoop 0.20.2"
-  git show 2012_DEC_14
-  git describe --tags
-  # make a file change.
-  git push --tags
+```bash
+git tag -a 2012_DEC_14 -m "with hadoop 0.20.2"
+git show 2012_DEC_14
+git describe --tags
+# make a file change.
+git push --tags
+```
 
