@@ -14,9 +14,10 @@ Step one is to create your own stackscript. Mine was called "InitializeAccumulo"
 
 ```bash
 #!/bin/bash
-wget https://raw.github.com/medined/accumulo_stackscript/master/linode_build_v00/stackscript -O /tmp/stackscript.sh
-chmod +x /tmp/stackscript.sh
-/tmp/stackscript.sh
+apt-get -y install git
+git clone https://github.com/medined/accumulo_stackscript.git
+cd accumulo_stackscript
+./stackscript
 ```
 
 After the Linode server boots, it will take about 10 minutes to run this script. Then you can use ssh to login as the 'accumulo' user (the password is 'password'). Run two more commands and your server is completely setup.
@@ -38,9 +39,11 @@ Git
 
 Making a tag.
 
-  git tag -a 2012_DEC_14 -m "with hadoop 0.20.2"
-  git show 2012_DEC_14
-  git describe --tags
-  # make a file change.
-  git push --tags
+```bash
+git tag -a 2012_DEC_14 -m "with hadoop 0.20.2"
+git show 2012_DEC_14
+git describe --tags
+# make a file change.
+git push --tags
+```
 

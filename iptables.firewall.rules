@@ -17,6 +17,12 @@
 # Zookeeper
 -A INPUT -p tcp --dport 2181 -j ACCEPT
 
+# Accumulo TSERVER
+-A INPUT -p tcp --dport 9997 -j ACCEPT
+
+# Accumulo TRACE
+-A INPUT -p tcp --dport 12234 -j ACCEPT
+
 # Hadoop Job Tracker
 -A INPUT -p tcp --dport 50030 -j ACCEPT
 
@@ -25,6 +31,9 @@
 
 # Hadoop Secondary Name Node. No reason to expose this.
 #-A INPUT -p tcp --dport 50090 -j ACCEPT
+
+# Accumulo GC
+-A INPUT -p tcp --dport 50091 -j ACCEPT
 
 # Accumulo
 -A INPUT -p tcp --dport 50095 -j ACCEPT
