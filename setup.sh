@@ -2,11 +2,6 @@
 # setup some basic environment variables. 
 # define the add user function.
 
-##########
-# enable logging. Logs both to file and screen.
-exec 2>&1
-exec > >(tee -a $LOGFILE)
-
 if [[ $EUID -ne 0 ]]; then
    echo "You must be root to run this script. Aborting...";
    exit 1;
@@ -17,6 +12,11 @@ source versions.sh
 export CDIR=`pwd`
 export LOGFILE=/root/build.log
 export PASSWORD=`openssl passwd -1 password`
+
+##########
+# enable logging. Logs both to file and screen.
+exec 2>&1
+exec > >(tee -a $LOGFILE)
 
 function add_a_user {
   # create the group, if needed.
