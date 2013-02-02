@@ -190,7 +190,7 @@ hostname -f > /usr/local/accumulo/conf/tracers
 
 echo "initializing accumulo"
 su accumulo -c "/usr/local/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo 2>/dev/null"
-su accumulo -c "/usr/local/accumulo/bin/accumulo init --clear-instance-name --instance-name instance --password secret"
+su accumulo -c "/usr/local/accumulo/bin/accumulo init --clear-instance-name --instance-name instance --username root --password secret"
 
 echo "starting accumulo"
 su accumulo -c "/usr/local/accumulo/bin/start-all.sh"
