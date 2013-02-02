@@ -30,6 +30,7 @@
 
 test -z "$JAVA_HOME"             && export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-i386
 test -z "$HADOOP_HOME"           && export HADOOP_HOME=/usr/local/hadoop
+test -z "$HADOOP_PREFIX"         && export HADOOP_PREFIX=/usr/local/hadoop/bin/hadoop
 test -z "$ZOOKEEPER_HOME"        && export ZOOKEEPER_HOME=/usr/local/zookeeper
 test -z "$ACCUMULO_LOG_DIR"      && export ACCUMULO_LOG_DIR=$ACCUMULO_HOME/logs
 if [ -f ${ACCUMULO_HOME}/conf/accumulo.policy ]
