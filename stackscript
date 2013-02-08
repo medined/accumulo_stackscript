@@ -164,7 +164,6 @@ cd /usr/local/apache-accumulo-1.5.0-SNAPSHOT/server/src/main/c++
 make
 echo "Compiled navtive library"
 
-chown -R accumulo:accumulo /usr/local/apache-accumulo-1.5.0-SNAPSHOT
 # remove symbolic link and then create it.
 rm -f /usr/local/accumulo
 ln -s /usr/local/apache-accumulo-1.5.0-SNAPSHOT /usr/local/accumulo
@@ -185,6 +184,8 @@ hostname -f > /usr/local/accumulo/conf/masters
 hostname -f > /usr/local/accumulo/conf/monitor
 hostname -f > /usr/local/accumulo/conf/slaves
 hostname -f > /usr/local/accumulo/conf/tracers
+
+chown -R accumulo:accumulo /usr/local/apache-accumulo-1.5.0-SNAPSHOT
 
 ########
 
