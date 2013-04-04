@@ -157,16 +157,17 @@ echo "Compiled accumulo"
 
 # Make the lib/ext directory group writeable so that you can deply jar files there.
 cd /usr/local
-tar xfz /home/accumulo/workspace/accumulo/assemble/target/apache-accumulo-1.5.0-SNAPSHOT-dist.tar.gz
+tar xfz /home/accumulo/workspace/accumulo/assemble/target/apache-accumulo-1.6.0-SNAPSHOT-dist.tar.gz
 
 # Compile the native libraries
-cd /usr/local/apache-accumulo-1.5.0-SNAPSHOT/server/src/main/c++
+cd /usr/local/apache-accumulo-1.6.0-SNAPSHOT/server/src/main/c++
 make
 echo "Compiled navtive library"
 
+chown -R accumulo:accumulo /usr/local/apache-accumulo-1.6.0-SNAPSHOT
 # remove symbolic link and then create it.
 rm -f /usr/local/accumulo
-ln -s /usr/local/apache-accumulo-1.5.0-SNAPSHOT /usr/local/accumulo
+ln -s /usr/local/apache-accumulo-1.6.0-SNAPSHOT /usr/local/accumulo
 
 su accumulo -c "mkdir -p /usr/local/accumulo/lib/ext"
 su accumulo -c "mkdir -p /usr/local/accumulo/logs"
@@ -185,13 +186,11 @@ hostname -f > /usr/local/accumulo/conf/monitor
 hostname -f > /usr/local/accumulo/conf/slaves
 hostname -f > /usr/local/accumulo/conf/tracers
 
-chown -R accumulo:accumulo /usr/local/apache-accumulo-1.5.0-SNAPSHOT
-
 ########
 
 echo "initializing accumulo"
 su accumulo -c "/usr/local/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo 2>/dev/null"
-su accumulo -c "/usr/local/accumulo/bin/accumulo init --clear-instance-name --instance-name instance --username root --password secret"
+su accumulo -c "/usr/local/accumulo/bin/accumulo init --clear-instance-name --instance-name instance --password secret"
 
 echo "starting accumulo"
 su accumulo -c "/usr/local/accumulo/bin/start-all.sh"
