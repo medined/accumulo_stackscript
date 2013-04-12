@@ -68,8 +68,14 @@ cp $CDIR/iptables.firewall.rules /etc/iptables.firewall.rules
 cp $CDIR/firewall /etc/network/if-pre-up.d/firewall
 iptables-restore < /etc/iptables.firewall.rules
 
+# setup a source for maven3 which is required by Accumulo.
+echo "deb http://ppa.launchpad.net/natecarlson/maven3/ubuntu precise main" >> /etc/apt/sources.list
+echo "deb-src http://ppa.launchpad.net/natecarlson/maven3/ubuntu precise main" >> /etc/apt/sources.list
+apt-get update
+
 apt-get -y install curl maven2 openssh-server openssh-client
 apt-get -y install openjdk-6-jdk subversion screen g++ make
+apt-get -y install maven3
 
 #apt-get -y fail2bin
 echo "Installed packages"
