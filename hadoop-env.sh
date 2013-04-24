@@ -6,7 +6,20 @@
 # remote nodes.
 
 # The java implementation to use.  Required.
-export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-i386
+if [ -d /usr/lib/jvm/java-6-openjdk ];
+then
+  # Ubuntu 10.04 (and perhaps others)
+  export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
+fi
+if [ -d /usr/lib/jvm/java-6-openjdk-i386 ];
+then
+  export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-i386
+fi
+if [ "$JAVA_HOME" == "" ];
+then
+  echo "UNABLE TO SET JAVA_HOME!"
+fi
+
 
 # Extra Java CLASSPATH elements.  Optional.
 # export HADOOP_CLASSPATH=
