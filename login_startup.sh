@@ -4,6 +4,7 @@ export HADOOP_PREFIX=/usr/local/hadoop
 
 if [ -d /usr/lib/jvm/java-6-openjdk ];
 then
+  # Ubuntu 10.04 (and perhaps others)
   export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
 fi
 if [ -d /usr/lib/jvm/java-6-openjdk-i386 ];
