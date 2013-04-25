@@ -53,9 +53,9 @@ then
   export ACCUMULO_HOME=/usr/local/accumulo
 fi
 # an installation of accumulo in home directory overides
-if [ -d ~/software/accumulo ];
+if [ -d ~/bin/accumulo ];
 then
-  export ACCUMULO_HOME=~/software/accumulo
+  export ACCUMULO_HOME=~/bin/accumulo
 fi
 if [ "$ACCUMULO_HOME" == "" ];
 then
