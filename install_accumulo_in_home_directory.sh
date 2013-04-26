@@ -120,6 +120,8 @@ then
   cp $CDIR/hdfs-site.xml ~/software/hadoop/conf/hdfs-site.xml
   cp $CDIR/mapred-site.xml ~/software/hadoop/conf/mapred-site.xml
   cp $CDIR/hadoop-env.sh ~/software/hadoop/conf/hadoop-env.sh
+  cp $CDIR/generic_logger.xml ~/software/hadoop/conf
+  cp $CDIR/monitor_logger.xml ~/software/hadoop/conf
   # Update master and slaves with the hostname
   hostname -f > ~/software/hadoop/conf/masters
   hostname -f > ~/software/hadoop/conf/slaves

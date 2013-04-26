@@ -96,6 +96,8 @@ then
   cp $CDIR/hdfs-site.xml /usr/local/hadoop/conf/hdfs-site.xml
   cp $CDIR/mapred-site.xml /usr/local/hadoop/conf/mapred-site.xml
   cp $CDIR/hadoop-env.sh /usr/local/hadoop/conf/hadoop-env.sh
+  cp $CDIR/generic_logger.xml /usr/local/hadoop/conf
+  cp $CDIR/monitor_logger.xml /usr/local/hadoop/conf
   # Update master and slaves with the hostname
   hostname -f > /usr/local/hadoop/conf/masters
   hostname -f > /usr/local/hadoop/conf/slaves
