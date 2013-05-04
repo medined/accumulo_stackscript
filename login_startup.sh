@@ -23,10 +23,10 @@ then
 fi
 # an installation of hadoop in home directory overides
 
-if [ -d ~/software/hadoop-1.0.4 ];
+if [ -d $HOME/software/hadoop-1.0.4 ];
 then
-  export HADOOP_HOME=~/software/hadoop-1.0.4
-  export HADOOP_PREFIX=~/software/hadoop-1.0.4
+  export HADOOP_HOME=$HOME/software/hadoop-1.0.4
+  export HADOOP_PREFIX=$HOME/software/hadoop-1.0.4
 fi
 if [ "$HADOOP_HOME" == "" ];
 then
@@ -39,9 +39,9 @@ then
   export ZOOKEEPER_HOME=/usr/local/zookeeper
 fi
 # an installation of zookeeper in home directory overides
-if [ -d ~/software/zookeeper-3.4.3 ];
+if [ -d $HOME/software/zookeeper-3.4.3 ];
 then
-  export ZOOKEEPER_HOME=~/software/zookeeper-3.4.3
+  export ZOOKEEPER_HOME=$HOME/software/zookeeper-3.4.3
 fi
 if [ "$ZOOKEEPER_HOME" == "" ];
 then
@@ -54,9 +54,9 @@ then
   export ACCUMULO_HOME=/usr/local/accumulo
 fi
 # an installation of accumulo in home directory overides
-if [ -d ~/bin/apache-accumulo-1.6.0-SNAPSHOT ];
+if [ -d $HOME/bin/apache-accumulo-1.6.0-SNAPSHOT ];
 then
-  export ACCUMULO_HOME=~/bin/apache-accumulo-1.6.0-SNAPSHOT
+  export ACCUMULO_HOME=$HOME/bin/apache-accumulo-1.6.0-SNAPSHOT
 fi
 if [ "$ACCUMULO_HOME" == "" ];
 then
