@@ -2,6 +2,15 @@
 
 echo "You are about to install software into your HOME directory. You must have SUDO"
 echo "privileges! If you don't exit this script (^c) and get them."
+echo ""
+echo "SUDO Use:"
+echo "  copy a file to /etc/profile.d"
+echo "  changing swappiness"
+echo "  adding supergroup for hadoop"
+echo "  installing software via apt-get"
+echo ""
+echo "Ignore messages about HADOOP_HOME being deprecated."
+echo ""
 echo "Press <ENTER> to continue> "
 read
 
@@ -11,6 +20,7 @@ $HOME/software/hadoop/bin/stop-dfs.sh
 $HOME/software/zookeeper/bin/zkServer.sh stop
 rm -rf $HOME/bin $HOME/data $HOME/software
 
+export ACCUMULO_VERSION=accumulo-assemble-1.6.0-SNAPSHOT
 export HADOOP_VERSION=hadoop-1.0.4
 export CDIR=`pwd`
 export LOGFILE=$HOME/build.log
@@ -82,12 +92,6 @@ then
   sudo addgroup supergroup
   sudo adduser $USER supergroup
 fi
-
-##########
-# Setup the firewall (allow the hadoop, job tracker, and accumulo web pages)
-#sudo cp $CDIR/iptables.firewall.rules /etc/iptables.firewall.rules
-#sudo cp $CDIR/firewall /etc/network/if-pre-up.d/firewall
-#sudo iptables-restore < /etc/iptables.firewall.rules
 
 # setup a source for maven3 which is required by Accumulo.
 echo "deb http://ppa.launchpad.net/natecarlson/maven3/ubuntu precise main" | sudo tee -a /etc/apt/sources.list
@@ -179,7 +183,7 @@ echo "Installed Zookeeper"
 ##########
 # Create an hadoop user directory if needed. This is the HDFS default
 # directory for the user.
-result=`$HOME/software/hadoop/bin/hadoop fs -ls /user | grep $USER | wc -l`
+result=`$HOME/software/hadoop/bin/hadoop fs -ls /user 2>/dev/null | grep $USER | wc -l`
 if [ "$result" == "0" ];
 then
   $HOME/software/hadoop/bin/hadoop fs -mkdir /user/$USER
@@ -188,11 +192,13 @@ fi
 ##########
 # Create an accumulo hdfs directory if needed. This is the 
 # HDFS directory for accumulo.
-result=`$HOME/software/hadoop/bin/hadoop fs -ls /user | grep accumulo | wc -l`
+result=`$HOME/software/hadoop/bin/hadoop fs -ls /user 2>/dev/null | grep accumulo | wc -l`
 if [ "$result" == "0" ];
 then
   $HOME/software/hadoop/bin/hadoop fs -mkdir /user/accumulo
 fi
+
+echo "Connecting to apache.org. Please be patient..."
 
 svn co https://svn.apache.org/repos/asf/accumulo/trunk $HOME/software/accumulo
 echo "Cloned accumulo"
@@ -201,15 +207,15 @@ pushd $HOME/software/accumulo; mvn -DskipTests package -P assemble; popd
 echo "Compiled accumulo"
 
 # Make the lib/ext directory group writeable so that you can deply jar files there.
-tar xfz $HOME/software/accumulo/assemble/target/apache-accumulo-1.6.0-SNAPSHOT-dist.tar.gz -C $HOME/bin
+tar xfz $HOME/software/accumulo/assemble/target/$ACCUMULO_VERSION-bin.tar.gz -C $HOME/bin
 
 # Compile the native libraries
-pushd $HOME/bin/apache-accumulo-1.6.0-SNAPSHOT/server/src/main/c++; make; popd
+pushd $HOME/bin/$ACCUMULO_VERSION/server/src/main/c++; make; popd
 echo "Compiled navtive library"
 
 # remove symbolic link and then create it.
 rm -f $HOME/bin/accumulo
-ln -s $HOME/bin/apache-accumulo-1.6.0-SNAPSHOT $HOME/bin/accumulo
+ln -s $HOME/bin/$ACCUMULO_VERSION $HOME/bin/accumulo
 
 mkdir -p $HOME/bin/accumulo/lib/ext
 mkdir -p $HOME/bin/accumulo/logs
@@ -226,11 +232,11 @@ hostname -f > $HOME/bin/accumulo/conf/monitor
 hostname -f > $HOME/bin/accumulo/conf/slaves
 hostname -f > $HOME/bin/accumulo/conf/tracers
 
-########
-
-#echo "initializing accumulo"
+echo "initializing accumulo"
 $HOME/software/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo 2>/dev/null
 $HOME/bin/accumulo/bin/accumulo init --clear-instance-name --instance-name instance --username root --password secret
+
+exit
 
 echo "starting accumulo"
 $HOME/bin/accumulo/bin/start-all.sh

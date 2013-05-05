@@ -39,9 +39,9 @@ then
   export ZOOKEEPER_HOME=/usr/local/zookeeper
 fi
 # an installation of zookeeper in home directory overides
-if [ -d $HOME/software/zookeeper-3.4.3 ];
+if [ -d $HOME/software/zookeeper ];
 then
-  export ZOOKEEPER_HOME=$HOME/software/zookeeper-3.4.3
+  export ZOOKEEPER_HOME=$HOME/software/zookeeper
 fi
 if [ "$ZOOKEEPER_HOME" == "" ];
 then
@@ -54,9 +54,9 @@ then
   export ACCUMULO_HOME=/usr/local/accumulo
 fi
 # an installation of accumulo in home directory overides
-if [ -d $HOME/bin/apache-accumulo-1.6.0-SNAPSHOT ];
+if [ -d $HOME/bin/accumulo ];
 then
-  export ACCUMULO_HOME=$HOME/bin/apache-accumulo-1.6.0-SNAPSHOT
+  export ACCUMULO_HOME=$HOME/bin/accumulo
 fi
 if [ "$ACCUMULO_HOME" == "" ];
 then
