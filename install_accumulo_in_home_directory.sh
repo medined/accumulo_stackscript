@@ -67,6 +67,18 @@ echo "Storing the host key fingerprint to avoid a question when using SSH for th
 mkdir -p $HOME/.ssh
 chmod 700 $HOME/.ssh
 
+if [ ! -f $HOME/.ssh/id_rsa ];
+then
+  ssh-keygen -t rsa -P '' -f $HOME/.ssh/id_rsa
+  cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+fi
+if [ ! -f $HOME/.ssh/id_dsa ];
+then
+  ssh-keygen -t dsa -P '' -f $HOME/.ssh/id_dsa
+  cat $HOME/.ssh/id_dsa.pub >> $HOME/.ssh/authorized_keys
+fi
+chmod 600 $HOME/.ssh/authorized_keys
+
 result=`grep "ssh-dss" $HOME/.ssh/known_hosts 2>/dev/null | wc -l`
 if [ "$result" == "0" ];
 then
