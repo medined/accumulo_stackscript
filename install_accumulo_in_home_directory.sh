@@ -54,7 +54,10 @@ date +"%Y/%m/%d %H:%M:%S"
 
 echo "Storing the host key fingerprint to avoid a question when using SSH for the first time."
 
-result=`grep "ssh-dss" $HOME/.ssh/known_hosts | wc -l`
+mkdir -p $HOME/.ssh
+chmod 700 $HOME/.ssh
+
+result=`grep "ssh-dss" $HOME/.ssh/known_hosts 2>/dev/null | wc -l`
 if [ "$result" == "0" ];
 then
   ssh-keyscan -t dsa localhost >> $HOME/.ssh/known_hosts
@@ -64,7 +67,7 @@ then
     ssh-keyscan -t dsa `hostname` >> $HOME/.ssh/known_hosts
   fi
 fi
-result=`grep "ssh-rsa" $HOME/.ssh/known_hosts | wc -l`
+result=`grep "ssh-rsa" $HOME/.ssh/known_hosts 2>/dev/null | wc -l`
 if [ "$result" == "0" ];
 then
   ssh-keyscan -t rsa localhost >> $HOME/.ssh/known_hosts
