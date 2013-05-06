@@ -18,7 +18,7 @@ $HOME/bin/accumulo/bin/stop-all.sh
 $HOME/software/hadoop/bin/stop-mapred.sh
 $HOME/software/hadoop/bin/stop-dfs.sh
 $HOME/software/zookeeper/bin/zkServer.sh stop
-rm -rf $HOME/bin $HOME/data $HOME/software
+rm -rf $HOME/bin $HOME/data $HOME/software $HOME/.accumulo
 
 export ACCUMULO_VERSION=accumulo-assemble-1.6.0-SNAPSHOT
 export HADOOP_VERSION=hadoop-1.0.4
@@ -49,8 +49,8 @@ date +"%Y/%m/%d %H:%M:%S"
 
 ##########
 # Setup environment variables when a user logs in.
-sudo cp $CDIR/login_startup.sh /etc/profile.d
-source /etc/profile.d/login_startup.sh
+#sudo cp $CDIR/login_startup.sh /etc/profile.d
+#source /etc/profile.d/login_startup.sh
 
 echo "Storing the host key fingerprint to avoid a question when using SSH for the first time."
 
@@ -225,7 +225,7 @@ echo "Created ext, logs, and walogs directory."
 
 cp $HOME/bin/accumulo/conf/examples/512MB/standalone/* $HOME/bin/accumulo/conf
 cp $CDIR/accumulo-site.xml $HOME/bin/accumulo/conf/accumulo-site.xml
-cp $CDIR/accumulo-env.sh $HOME/bin/accumulo/conf/accumulo-env.sh
+cp $CDIR/accumulo-env_for_home_directory.sh $HOME/bin/accumulo/conf/accumulo-env.sh
 hostname -f > $HOME/bin/accumulo/conf/gc
 hostname -f > $HOME/bin/accumulo/conf/masters
 hostname -f > $HOME/bin/accumulo/conf/monitor
@@ -240,6 +240,14 @@ exit
 
 echo "starting accumulo"
 $HOME/bin/accumulo/bin/start-all.sh
+
+echo "------------------------"
+echo "Please define the following variables:"
+echo "  ACCUMULO_HOME=$HOME/bin/accumulo"
+echo "  JAVA_HOME=/usr/lib/jvm/java-6-openjdk"
+echo "  HADOOP_HOME=$HOME/software/hadoop"
+echo "  ZOOKEEPER_HOME=$HOME/software/zookeeper"
+echo "------------------------"
 
 date +"%Y/%m/%d %H:%M:%S"
 echo "- END ------------"
