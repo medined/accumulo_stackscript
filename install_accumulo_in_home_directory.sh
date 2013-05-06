@@ -210,8 +210,8 @@ echo "Compiled accumulo"
 tar xfz $HOME/software/accumulo/assemble/target/$ACCUMULO_VERSION-bin.tar.gz -C $HOME/bin
 
 # Compile the native libraries
-pushd $HOME/bin/$ACCUMULO_VERSION/server/src/main/c++; make; popd
-echo "Compiled navtive library"
+#pushd $HOME/bin/$ACCUMULO_VERSION/server/src/main/c++; make; popd
+#echo "Compiled navtive library"
 
 # remove symbolic link and then create it.
 rm -f $HOME/bin/accumulo
