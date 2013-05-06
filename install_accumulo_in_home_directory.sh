@@ -14,14 +14,24 @@ echo ""
 echo "Press <ENTER> to continue> "
 read
 
-$HOME/bin/accumulo/bin/stop-all.sh
-$HOME/software/hadoop/bin/stop-mapred.sh
-$HOME/software/hadoop/bin/stop-dfs.sh
-$HOME/software/zookeeper/bin/zkServer.sh stop
+if [ -d $HOME/bin/accumulo ];
+then
+  $HOME/bin/accumulo/bin/stop-all.sh
+fi
+if [ -d $HOME/software/hadoop ];
+then
+  $HOME/software/hadoop/bin/stop-mapred.sh
+  $HOME/software/hadoop/bin/stop-dfs.sh
+fi
+if [ -d $HOME/software/zookeeper ];
+then
+  $HOME/software/zookeeper/bin/zkServer.sh stop
+fi
 rm -rf $HOME/bin $HOME/data $HOME/software $HOME/.accumulo
 
 export ACCUMULO_VERSION=accumulo-assemble-1.6.0-SNAPSHOT
 export HADOOP_VERSION=hadoop-1.0.4
+export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
 export CDIR=`pwd`
 export LOGFILE=$HOME/build.log
 export PASSWORD=`openssl passwd -1 password`
