@@ -40,8 +40,6 @@ echo "initializing accumulo"
 $BASE_DIR/software/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo 2>/dev/null
 $BASE_DIR/bin/accumulo/bin/accumulo init --clear-instance-name --instance-name instance --username root --password secret
 
-exit
-
 echo "starting accumulo"
 $BASE_DIR/bin/accumulo/bin/start-all.sh
 
