@@ -2,7 +2,7 @@
 
 source setup.sh
 
-if [-d $BASE_DIR/bin/accumulo ];
+if [ -d $BASE_DIR/bin/accumulo ];
 then
   $BASE_DIR/bin/accumulo/bin/stop-all.sh
 fi
