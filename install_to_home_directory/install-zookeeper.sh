@@ -2,6 +2,8 @@
 
 source setup.sh
 
+CDIR=..
+
 # install and configure zookeeper
 if [ ! -f $BASE_DIR/software/zookeeper-3.4.3/conf/zoo.cfg ];
 then
