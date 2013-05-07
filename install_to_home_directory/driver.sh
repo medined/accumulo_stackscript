@@ -14,7 +14,6 @@ echo ""
 echo "Press <ENTER> to continue> "
 read
 
-pushd install_to_home_directory
 source stop-all.sh
 source ssh-setup.sh
 
@@ -65,8 +64,6 @@ echo "  JAVA_HOME=/usr/lib/jvm/java-6-openjdk"
 echo "  HADOOP_HOME=$HOME/software/hadoop"
 echo "  ZOOKEEPER_HOME=$HOME/software/zookeeper"
 echo "------------------------"
-
-popd
 
 date +"%Y/%m/%d %H:%M:%S"
 echo "- END ------------"
