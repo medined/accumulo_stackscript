@@ -2,11 +2,12 @@
 
 source setup.sh
 
+CDIR=..
+
 # install and configure hadoop
 if [ ! -f $BASE_DIR/software/$HADOOP_VERSION/conf/core-site.xml ];
 then
-  cd $BASE_DIR/software
-  tar xfz $CDIR/$HADOOP_VERSION.tar.gz
+  tar xfz $CDIR/$HADOOP_VERSION.tar.gz -C $BASE_DIR/software
   rm -f $BASE_DIR/software/hadoop
   ln -s $HADOOP_VERSION hadoop
   cp $CDIR/core-site.xml $BASE_DIR/software/hadoop/conf/core-site.xml
