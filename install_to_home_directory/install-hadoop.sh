@@ -9,7 +9,7 @@ if [ ! -f $BASE_DIR/software/$HADOOP_VERSION/conf/core-site.xml ];
 then
   tar xfz $CDIR/$HADOOP_VERSION.tar.gz -C $BASE_DIR/software
   rm -f $BASE_DIR/software/hadoop
-  ln -s $HADOOP_VERSION hadoop
+  ln -s $BASE_DIR/software/$HADOOP_VERSION $BASE_DIR/software/hadoop
   cp $CDIR/core-site.xml $BASE_DIR/software/hadoop/conf/core-site.xml
   cp $CDIR/hdfs-site.xml $BASE_DIR/software/hadoop/conf/hdfs-site.xml
   cp $CDIR/mapred-site.xml $BASE_DIR/software/hadoop/conf/mapred-site.xml
