@@ -17,19 +17,11 @@ read
 source stop-all.sh
 source ssh-setup.sh
 
-export CDIR=`pwd`
-
 ##########
 # Before this script is called have your system do:
 #
 # apt-get -y install git
 # git clone https://github.com/medined/accumulo_stackscript.git
-
-if [ ! -f sysctl.conf ];
-then
-  echo "PLEASE USE git clone to get the whole project from github."
-  exit
-fi
 
 echo "- START ------------"
 date +"%Y/%m/%d %H:%M:%S"
@@ -38,7 +30,7 @@ date +"%Y/%m/%d %H:%M:%S"
 # Update the sysctl file to set swappiness. And set it for the current session.
 echo "SYSCTL.CONF: Setting swappiness to 10"
 echo "SYSCTL.CONF: Disabling IPV6"
-sudo cp $CDIR/sysctl.conf /etc/sysctl.conf
+sudo cp ../sysctl.conf /etc/sysctl.conf
 sudo sysctl vm.swappiness=10
 
 ##########
@@ -67,3 +59,4 @@ echo "------------------------"
 
 date +"%Y/%m/%d %H:%M:%S"
 echo "- END ------------"
+echo

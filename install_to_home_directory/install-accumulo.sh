@@ -11,15 +11,15 @@ pushd $BASE_DIR/software/accumulo; mvn -DskipTests package -P assemble; popd
 echo "Compiled accumulo"
 
 # Make the lib/ext directory group writeable so that you can deply jar files there.
-tar xfz $BASE_DIR/software/accumulo/assemble/target/$ACCUMULO_VERSION-bin.tar.gz -C $BASE_DIR/bin
+tar xfz $BASE_DIR/software/accumulo/assemble/target/$MY_ACCUMULO_VERSION-bin.tar.gz -C $BASE_DIR/bin
 
 # Compile the native libraries
-#pushd $BASE_DIR/bin/$ACCUMULO_VERSION/server/src/main/c++; make; popd
+#pushd $BASE_DIR/bin/$MY_ACCUMULO_VERSION/server/src/main/c++; make; popd
 #echo "Compiled navtive library"
 
 # remove symbolic link and then create it.
 rm -f $BASE_DIR/bin/accumulo
-ln -s $BASE_DIR/bin/$ACCUMULO_VERSION $BASE_DIR/bin/accumulo
+ln -s $BASE_DIR/bin/$MY_ACCUMULO_VERSION $BASE_DIR/bin/accumulo
 
 mkdir -p $BASE_DIR/bin/accumulo/lib/ext
 mkdir -p $BASE_DIR/bin/accumulo/logs
@@ -28,8 +28,8 @@ mkdir -p $BASE_DIR/bin/accumulo/walogs
 echo "Created ext, logs, and walogs directory."
 
 cp $BASE_DIR/bin/accumulo/conf/examples/512MB/standalone/* $BASE_DIR/bin/accumulo/conf
-cp $CDIR/accumulo-site.xml $BASE_DIR/bin/accumulo/conf/accumulo-site.xml
-cp $CDIR/accumulo-env_for_home_directory.sh $BASE_DIR/bin/accumulo/conf/accumulo-env.sh
+cp accumulo-site.xml $BASE_DIR/bin/accumulo/conf/accumulo-site.xml
+cp accumulo-env.sh $BASE_DIR/bin/accumulo/conf/accumulo-env.sh
 hostname -f > $BASE_DIR/bin/accumulo/conf/gc
 hostname -f > $BASE_DIR/bin/accumulo/conf/masters
 hostname -f > $BASE_DIR/bin/accumulo/conf/monitor

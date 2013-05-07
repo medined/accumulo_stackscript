@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export ACCUMULO_VERSION=accumulo-assemble-1.6.0-SNAPSHOT
+export MY_ACCUMULO_VERSION=accumulo-assemble-1.6.0-SNAPSHOT
 export BASE_DIR=$HOME/accumulo_home
 export HADOOP_VERSION=hadoop-1.0.4
 export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
