@@ -3,23 +3,17 @@
 source setup.sh
 
 echo "Stopping Accumulo"
-if [ -d $BASE_DIR/bin/accumulo ];
-then
-  $BASE_DIR/bin/accumulo/bin/stop-all.sh
-fi
+kill -9 `jps -v | grep "accumulo.core" | cut -f1 -d' '` 2>/dev/null
 
 echo "Stopping Hadoop"
-if [ -d $BASE_DIR/software/hadoop ];
-then
-  $BASE_DIR/software/hadoop/bin/stop-mapred.sh
-  $BASE_DIR/software/hadoop/bin/stop-dfs.sh
-fi
+kill -9 `jps | grep JobTracker | cut -f1 -d' '` 2>/dev/null
+kill -9 `jps | grep TaskTracker | cut -f1 -d' '` 2>/dev/null
+kill -9 `jps | grep SecondaryNameNode | cut -f1 -d' '` 2>/dev/null
+kill -9 `jps | grep DataNode | cut -f1 -d' '` 2>/dev/null
+kill -9 `jps | grep NameNode | cut -f1 -d' '` 2>/dev/null
 
 echo "Stopping Zookeeper"
-if [ -d $BASE_DIR/software/zookeeper ];
-then
-  $BASE_DIR/software/zookeeper/bin/zkServer.sh stop
-fi
+kill -9 `jps | grep QuorumPeerMain | cut -f1 -d' '` 2>/dev/null
 
 rm -rf $BASE_DIR $HOME/.accumulo
 
