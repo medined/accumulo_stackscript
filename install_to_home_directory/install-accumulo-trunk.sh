@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source setup.sh
+export MY_ACCUMULO_VERSION=1.6.0-SNAPSHOT
 
 echo "Connecting to apache.org. Please be patient..."
 
@@ -11,15 +12,15 @@ pushd $BASE_DIR/software/accumulo; mvn -DskipTests package -P assemble; popd
 echo "Compiled accumulo"
 
 # Make the lib/ext directory group writeable so that you can deply jar files there.
-tar xfz $BASE_DIR/software/accumulo/assemble/target/$MY_ACCUMULO_VERSION-bin.tar.gz -C $BASE_DIR/bin
+tar xfz $BASE_DIR/software/accumulo/assemble/target/accumulo-$MY_ACCUMULO_VERSION-bin.tar.gz -C $BASE_DIR/bin
 
 # Compile the native libraries
-#pushd $BASE_DIR/bin/$MY_ACCUMULO_VERSION/server/src/main/c++; make; popd
+#pushd $BASE_DIR/bin/accumulo-$MY_ACCUMULO_VERSION/server/src/main/c++; make; popd
 #echo "Compiled navtive library"
 
 # remove symbolic link and then create it.
 rm -f $BASE_DIR/bin/accumulo
-ln -s $BASE_DIR/bin/$MY_ACCUMULO_VERSION $BASE_DIR/bin/accumulo
+ln -s $BASE_DIR/bin/accumulo-$MY_ACCUMULO_VERSION $BASE_DIR/bin/accumulo
 
 mkdir -p $BASE_DIR/bin/accumulo/lib/ext
 mkdir -p $BASE_DIR/bin/accumulo/logs

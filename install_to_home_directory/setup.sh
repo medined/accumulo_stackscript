@@ -29,7 +29,6 @@ export HADOOP_PREFIX=$BASE_DIR/software/hadoop
 export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
 export ZOOKEEPER_HOME=$BASE_DIR/software/zookeeper
 
-export MY_ACCUMULO_VERSION=accumulo-1.4.3
 export HADOOP_VERSION=hadoop-1.0.4
 export LOGFILE=$HOME/build.log
 export PASSWORD=`openssl passwd -1 password`
