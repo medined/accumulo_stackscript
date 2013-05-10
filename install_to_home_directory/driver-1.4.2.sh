@@ -1,13 +1,18 @@
 #!/bin/bash
 
-echo "You are about to install software into your HOME directory. You must have SUDO"
-echo "privileges! If you don't exit this script (^c) and get them."
-echo ""
-echo "SUDO Use:"
-echo "  copy a file to /etc/profile.d"
-echo "  changing swappiness"
-echo "  adding supergroup for hadoop"
-echo "  installing software via apt-get"
+CAN_I_RUN_SUDO=$(sudo -n uptime 2>&1|grep "load"|wc -l)
+if [ ${CAN_I_RUN_SUDO} -eq 0 ]
+then
+    echo "I am sorry but you can't run this script without the ability to use"
+    echo "SUDO because the script uses apt-get to install software packages."
+    echo ""
+    echo "All use of sudo is done inside sudo-tasks.sh and install-packages.sh"
+    echo "If your system administrator runs those two scripts then you can "
+    echo "this driver script to exclude them."
+    exit
+fi
+
+echo "You are about to install software into your HOME directory."
 echo ""
 echo "Ignore messages about HADOOP_HOME being deprecated."
 echo ""
@@ -29,24 +34,7 @@ source ./ssh-setup.sh
 echo "- START ------------"
 date +"%Y/%m/%d %H:%M:%S"
 
-##########
-# Update the sysctl file to set swappiness. And set it for the current session.
-echo "SYSCTL.CONF: Setting swappiness to 10"
-echo "SYSCTL.CONF: Disabling IPV6"
-sudo cp ../sysctl.conf /etc/sysctl.conf
-sudo sysctl vm.swappiness=10
-
-##########
-# Create a supergroup group and put the accumulo user in it so that
-# the Accumulo monitor page can access the Namenode information.
-result=`getent group supergroup | grep supergroup | wc -l`
-if [ "$result" == "0" ];
-then
-  echo "Adding supergroup. Adding $USER to supergroup"
-  sudo addgroup supergroup
-  sudo adduser $USER supergroup
-fi
-
+source ./sudo-tasks.sh
 source ./install-packages.sh
 source ./install-hadoop.sh
 source ./install-zookeeper.sh
@@ -61,6 +49,9 @@ echo "  JAVA_HOME=/usr/lib/jvm/java-6-openjdk"
 echo "  HADOOP_HOME=$BASE_DIR/bin/hadoop"
 echo "  HADOOP_PREFIX=$BASE_DIR/bin/hadoop"
 echo "  ZOOKEEPER_HOME=$BASE_DIR/bin/zookeeper"
+echo ""
+echo "Don't forget to update your PATH! Check setup.sh"
+echo "if you need hints."
 echo "------------------------"
 
 date +"%Y/%m/%d %H:%M:%S"
