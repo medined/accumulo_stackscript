@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source setup.sh
+source ./setup.sh
 
 # setup a source for maven3 which is required by Accumulo.
 echo "deb http://ppa.launchpad.net/natecarlson/maven3/ubuntu precise main" | sudo tee -a /etc/apt/sources.list
@@ -16,4 +16,3 @@ sudo rm /usr/bin/mvn
 sudo ln -s /usr/share/maven3/bin/mvn /usr/bin/mvn
 
 echo "Installed packages"
-

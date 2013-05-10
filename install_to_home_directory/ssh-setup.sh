@@ -4,7 +4,7 @@
 # Notice this file uses HOME instead of HOME
 #
 
-source setup.sh
+source ./setup.sh
 
 echo "Storing the host key fingerprint to avoid a question when using SSH for the first time."
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source setup.sh
+source ./setup.sh
 export MY_ACCUMULO_VERSION=1.4.3
 
 echo "Connecting to apache.org. Please be patient..."

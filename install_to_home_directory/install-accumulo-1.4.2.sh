@@ -1,9 +1,17 @@
 #!/bin/bash
 
-source setup.sh
+source ./setup.sh
+source ./stop-all.sh
+
 export MY_ACCUMULO_VERSION=1.4.2
 
+rm -rf $BASE_DIR/software/accumulo
+rm -rf $BASE_DIR/bin/accumulo-$MY_ACCUMULO_VERSION
+
 echo "Connecting to apache.org. Please be patient..."
+
+# Accumulo is downloaded into a software directory and then installed
+# into a bin directory.
 
 svn co https://svn.apache.org/repos/asf/accumulo/tags/$MY_ACCUMULO_VERSION $BASE_DIR/software/accumulo
 echo "Cloned accumulo"
@@ -28,19 +36,21 @@ mkdir -p $BASE_DIR/bin/accumulo/walogs
 
 echo "Created ext, logs, and walogs directory."
 
-#cp $BASE_DIR/bin/accumulo/conf/examples/512MB/standalone/* $BASE_DIR/bin/accumulo/conf
-#cp accumulo-site.xml $BASE_DIR/bin/accumulo/conf/accumulo-site.xml
-#cp accumulo-env.sh $BASE_DIR/bin/accumulo/conf/accumulo-env.sh
-#hostname -f > $BASE_DIR/bin/accumulo/conf/gc
-#hostname -f > $BASE_DIR/bin/accumulo/conf/masters
-#hostname -f > $BASE_DIR/bin/accumulo/conf/monitor
-#hostname -f > $BASE_DIR/bin/accumulo/conf/slaves
-#hostname -f > $BASE_DIR/bin/accumulo/conf/tracers
+cp $BASE_DIR/bin/accumulo/conf/examples/512MB/standalone/* $BASE_DIR/bin/accumulo/conf
+cp accumulo-site.xml $BASE_DIR/bin/accumulo/conf/accumulo-site.xml
+cp accumulo-env.sh $BASE_DIR/bin/accumulo/conf/accumulo-env.sh
+hostname -f > $BASE_DIR/bin/accumulo/conf/gc
+hostname -f > $BASE_DIR/bin/accumulo/conf/masters
+hostname -f > $BASE_DIR/bin/accumulo/conf/monitor
+hostname -f > $BASE_DIR/bin/accumulo/conf/slaves
+hostname -f > $BASE_DIR/bin/accumulo/conf/tracers
+
+./start-hadoop.sh
+./start-zookeeper.sh
 
 echo "initializing accumulo"
-$BASE_DIR/software/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo 2>/dev/null
-#$BASE_DIR/bin/accumulo/bin/accumulo init 
+$BASE_DIR/bin/hadoop/bin/hadoop fs -rmr /user/accumulo/accumulo 2>/dev/null
+$BASE_DIR/bin/accumulo/bin/accumulo init 
 
-echo "starting accumulo"
-#$BASE_DIR/bin/accumulo/bin/start-all.sh
-
+./stop-hadoop.sh
+./stop-zookeeper.sh

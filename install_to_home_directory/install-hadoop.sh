@@ -3,7 +3,6 @@
 source ./setup.sh
 source ./stop-all.sh
 
-
 export CDIR=..
 # define the location to install hadoop.
 export HBASE_DIR=$BASE_DIR/bin
@@ -29,20 +28,16 @@ hostname -f > $HBASE_DIR/hadoop/conf/masters
 hostname -f > $HBASE_DIR/hadoop/conf/slaves
 sed -i "s/localhost/`hostname -f`/" $HBASE_DIR/hadoop/conf/core-site.xml
 # Note that I use a different delimiter instead of standard slash below because I am working with directory names.
-sed -i "s^/hadoop_tmp_dir^`echo $BASE_DIR`/data/hadoop_tmp_dir^" $HBASE_DIR/hadoop/conf/core-site.xml
+sed -i "s^/hadoop_tmp_dir^$BASE_DIR/data/hadoop_tmp_dir^" $HBASE_DIR/hadoop/conf/core-site.xml
 sed -i "s/localhost/`hostname -f`/" $HBASE_DIR/hadoop/conf/mapred-site.xml
 
 $HBASE_DIR/hadoop/bin/hadoop namenode -format
 
 ##########
 $HBASE_DIR/hadoop/bin/start-dfs.sh
-# this creates /home/$USER directory in HDFS.
-$HBASE_DIR/hadoop/bin/start-mapred.sh
 
 $HBASE_DIR/hadoop/bin/hadoop fs -mkdir /user/$USER
 $HBASE_DIR/hadoop/bin/hadoop fs -mkdir /user/accumulo
 
-echo "Installed Hadoop"
-echo "View http://localhost:50070 for Name Node monitor."
-echo "View http://localhost:50030 for Job Tracker monitor."
+$HBASE_DIR/hadoop/bin/stop-dfs.sh
 

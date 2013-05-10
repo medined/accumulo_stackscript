@@ -1,26 +1,24 @@
 #!/bin/bash
 
-source setup.sh
+source ./setup.sh
+source ./stop-all.sh
 
 CDIR=..
+export ZBASE_DIR=$BASE_DIR/bin
 
-# install and configure zookeeper
-if [ ! -f $BASE_DIR/software/zookeeper-3.4.3/conf/zoo.cfg ];
-then
-  tar xfz $CDIR/zookeeper-3.4.3.tar.gz -C $BASE_DIR/software
-  cp $CDIR/zoo.cfg $BASE_DIR/software/zookeeper-3.4.3/conf/zoo.cfg
-  ln -s $BASE_DIR/software/zookeeper-3.4.3 $BASE_DIR/software/zookeeper
-  mkdir -p $BASE_DIR/data/zookeeper_tmp_dir
-  chmod 777 $BASE_DIR/data/zookeeper_tmp_dir
-  sed -i "s/\/zookeeper_tmp_dir/\/home\/$USER\/data\/zookeeper_tmp_dir/" $BASE_DIR/software/zookeeper/conf/zoo.cfg
-fi
+rm -rf $ZBASE_DIR/zookeeper
+rm -rf $ZBASE_DIR/$ZOOKEEPER_VERSION
+rm -rf $BASE_DIR/data/zookeeper_tmp_dir
+mkdir -p $BASE_DIR/data/zookeeper_tmp_dir
+chmod 777 $BASE_DIR/data/zookeeper_tmp_dir
 
-# start zookeeper
-result=`ps faux | grep "QuorumPeerMain" | wc -l`
-if [ "$result" != "2" ];
-then
-  pushd $BASE_DIR/software/zookeeper; ./bin/zkServer.sh start; popd
-fi
+echo "Untarring $ZOOKEEPER_VERSION to $ZBASE_DIR"
+tar xfz $CDIR/$ZOOKEEPER_VERSION.tar.gz -C $ZBASE_DIR
+ln -s $ZBASE_DIR/$ZOOKEEPER_VERSION $ZBASE_DIR/zookeeper
+cp $CDIR/zoo.cfg $ZBASE_DIR/zookeeper/conf/zoo.cfg
+# Note that I use a different delimiter instead of standard slash below because I am working with directory names.
+sed -i "s^/zookeeper_tmp_dir^$BASE_DIR/data/zookeeper_tmp_dir^" $ZBASE_DIR/zookeeper/conf/zoo.cfg
+
+pushd $ZBASE_DIR/zookeeper; ./bin/zkServer.sh start; popd
 
 echo "Installed Zookeeper"
-

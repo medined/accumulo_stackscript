@@ -50,7 +50,7 @@ fi
 source ./install-packages.sh
 source ./install-hadoop.sh
 source ./install-zookeeper.sh
-source ./install-accumulo-trunk.sh
+source ./install-accumulo-1.4.2.sh
 
 source ./start-all.sh
 
