@@ -1,6 +1,11 @@
 Accumulo Stackscript
 ====================
 
+2013-May-10 The driver-1.4.2.sh script seems to be working perfectly to install hadoop, zookeeper, and accumulo into ~/accumulo_home/bin. 
+
+
+2013-May-10 The scripts that pull trunk are not working correctly. The symptom is that the Accumulo monitor page is not responding.
+
 Provides stackscripts to install hadoop, zookeeper and accumulo on a Linode server.
 
 I wanted a way to test the very latest Accumulo code. I could not use any of my existing systems because they were multi-use boxes. So I wrote a Stackscript in order to prepare a Linode server. Note that this script pulls a few files from my affy.com server for simplicity.

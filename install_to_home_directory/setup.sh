@@ -28,4 +28,3 @@ pathmunge $ZOOKEEPER_HOME/bin
 pathmunge $ACCUMULO_HOME/bin
 
 mkdir -p $BASE_DIR/software $BASE_DIR/data $BASE_DIR/bin
-
