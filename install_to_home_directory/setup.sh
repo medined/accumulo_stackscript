@@ -17,15 +17,15 @@ pathmunge /sbin
 pathmunge /bin
 pathmunge /usr/games
 pathmunge /usr/lib/jvm/java-6-openjdk/bin
-pathmunge $HOME/accumulo_home/software/hadoop/bin
+pathmunge $HOME/accumulo_home/bin/hadoop/bin
 pathmunge $HOME/accumulo_home/software/zookeeper/bin
 pathmunge $HOME/accumulo_home/bin/accumulo/bin
 
 export BASE_DIR=$HOME/accumulo_home
 
 export ACCUMULO_HOME=$BASE_DIR/bin/accumulo
-export HADOOP_HOME=$BASE_DIR/software/hadoop
-export HADOOP_PREFIX=$BASE_DIR/software/hadoop
+export HADOOP_HOME=$BASE_DIR/bin/hadoop
+export HADOOP_PREFIX=$BASE_DIR/bin/hadoop
 export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
 export ZOOKEEPER_HOME=$BASE_DIR/software/zookeeper
 
