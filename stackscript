@@ -169,17 +169,17 @@ echo "Compiled accumulo"
 
 # Make the lib/ext directory group writeable so that you can deply jar files there.
 cd /usr/local
-tar xfz /home/accumulo/workspace/accumulo/assemble/target/apache-accumulo-1.6.0-SNAPSHOT-dist.tar.gz
+tar xfz /home/accumulo/workspace/accumulo/assemble/target/accumulo-1.6.0-SNAPSHOT-bin.tar.gz
 
 # Compile the native libraries
-cd /usr/local/apache-accumulo-1.6.0-SNAPSHOT/server/src/main/c++
+cd /usr/local/accumulo-1.6.0-SNAPSHOT/server/src/main/c++
 make
 echo "Compiled navtive library"
 
-chown -R accumulo:accumulo /usr/local/apache-accumulo-1.6.0-SNAPSHOT
+chown -R accumulo:accumulo /usr/local/accumulo-1.6.0-SNAPSHOT
 # remove symbolic link and then create it.
 rm -f /usr/local/accumulo
-ln -s /usr/local/apache-accumulo-1.6.0-SNAPSHOT /usr/local/accumulo
+ln -s /usr/local/accumulo-1.6.0-SNAPSHOT /usr/local/accumulo
 
 su accumulo -c "mkdir -p /usr/local/accumulo/lib/ext"
 su accumulo -c "mkdir -p /usr/local/accumulo/logs"
